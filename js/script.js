@@ -147,11 +147,21 @@ window.addEventListener("DOMContentLoaded", () => {
         });
     });
 
+    function closeModal() {
+        modal.classList.add('hide');
+        modal.classList.remove('show');
+        document.body.style.overflow = '';
+    }
+
     modal.addEventListener('click', (event) => {
         if (event.target === modal || event.target === modalCloseBtn) {
-            modal.classList.add('hide');
-            modal.classList.remove('show');
-            document.body.style.overflow = '';
+            closeModal();
+        }
+    });
+
+    document.addEventListener('keydown', (event) => {
+        if (event.code === 'Escape' && modal.classList.contains('show')) {
+            closeModal();
         }
     });
 });
