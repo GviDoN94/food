@@ -44,7 +44,6 @@ window.addEventListener("DOMContentLoaded", () => {
 
     const deadline = "2023-05-20T00:00:00.000+03:00";
 
-
     function getTimerRemaind(endTime) {
         const total = Date.parse(endTime) - Date.parse(new Date());
         let days = 0,
@@ -173,12 +172,13 @@ window.addEventListener("DOMContentLoaded", () => {
 
     const modalTimerId = setTimeout(openModal, 10000);
 
-    function openModalByScroll() {
+    function showModalByScroll() {
         if (window.scrollY + document.documentElement.clientHeight >= document.documentElement.scrollHeight) {
             openModal();
+            window.removeEventListener('scroll', showModalByScroll);
             clearInterval(modalTimerId);
         }
     }
 
-    window.addEventListener('scroll', openModalByScroll);
+    window.addEventListener('scroll', showModalByScroll);
 });
