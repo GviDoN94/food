@@ -185,12 +185,13 @@ window.addEventListener("DOMContentLoaded", () => {
     // classes for cards
 
     class MenuCard {
-        constructor(src, alt, title, descr, price, parentSelector) {
+        constructor(src, alt, title, descr, price, parentSelector, ...classes) {
             this.src = src;
             this.alt = alt;
             this.title = title;
             this.descr = descr;
             this.price = price;
+            this.classes = classes;
             this.priceToRuble();
             this.parent = document.querySelector(parentSelector);
         }
@@ -201,7 +202,14 @@ window.addEventListener("DOMContentLoaded", () => {
 
         render() {
             const card = document.createElement('div');
-            card.classList.add('menu__item');
+            if (this.classes.length) {
+                this.classes
+                    .forEach(className => card.classList.add(className));
+            } else {
+                this.classes = 'menu__item';
+                card.classList.add(this.classes);
+            }
+
             card.innerHTML = `
                 <img src=${this.src} alt=${this.alt}>
                 <h3 class="menu__item-subtitle">${this.title}</h3>
@@ -226,7 +234,7 @@ window.addEventListener("DOMContentLoaded", () => {
         овощей и фруктов. Продукт активных и здоровых людей. Это абсолютноновый
         продукт с оптимальной ценой и высоким качеством!`,
         11,
-        '.menu .container'
+        '.menu .container',
     ).render();
 
     new MenuCard(
@@ -238,7 +246,8 @@ window.addEventListener("DOMContentLoaded", () => {
         Красная рыба, морепродукты, фрукты&nbsp;&mdash; ресторанное меню без
         похода в&nbsp;ресторан!`,
         15,
-        '.menu .container'
+        '.menu .container',
+        'menu__item',
     ).render();
 
     new MenuCard(
@@ -250,6 +259,7 @@ window.addEventListener("DOMContentLoaded", () => {
         или гречки, правильное количество белков за счет тофу и импортных
         вегетарианских стейков.`,
         9,
-        '.menu .container'
+        '.menu .container',
+        'menu__item',
     ).render();
 });
