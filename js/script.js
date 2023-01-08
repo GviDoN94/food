@@ -191,7 +191,12 @@ window.addEventListener("DOMContentLoaded", () => {
             this.title = title;
             this.descr = descr;
             this.price = price;
+            this.priceToRuble();
             this.parent = document.querySelector(parentSelector);
+        }
+
+        priceToRuble() {
+            this.price = this.price * 72;
         }
 
         render() {
@@ -220,7 +225,7 @@ window.addEventListener("DOMContentLoaded", () => {
         `Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих
         овощей и фруктов. Продукт активных и здоровых людей. Это абсолютноновый
         продукт с оптимальной ценой и высоким качеством!`,
-        229,
+        11,
         '.menu .container'
     ).render();
 
@@ -232,7 +237,7 @@ window.addEventListener("DOMContentLoaded", () => {
         красивый дизайн упаковки, но&nbsp;и&nbsp;качественное исполнение блюд.
         Красная рыба, морепродукты, фрукты&nbsp;&mdash; ресторанное меню без
         похода в&nbsp;ресторан!`,
-        550,
+        15,
         '.menu .container'
     ).render();
 
@@ -244,7 +249,7 @@ window.addEventListener("DOMContentLoaded", () => {
         продуктов животного происхождения,молоко из миндаля, овса, кокоса
         или гречки, правильное количество белков за счет тофу и импортных
         вегетарианских стейков.`,
-        430,
+        9,
         '.menu .container'
     ).render();
 });
