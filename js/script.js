@@ -265,9 +265,20 @@ window.addEventListener("DOMContentLoaded", () => {
 
     // Forms
 
+    const statusMessage = {
+        loading: 'Загрузка...',
+        success: 'Скоро мы свяжемся с вами!',
+        failure: 'Что-то пошло не так'
+    };
+
     function postData(form) {
         form.addEventListener('submit', (e) => {
             e.preventDefault();
+
+            const formMessage = document.createElement('div');
+            formMessage.classList.add('status');
+            formMessage.textContent = statusMessage.loading;
+            form.append(formMessage);
 
             const request = new XMLHttpRequest();
             request.open('POST', 'server.php');
@@ -277,10 +288,9 @@ window.addEventListener("DOMContentLoaded", () => {
 
             request.addEventListener('load', () => {
                 if (request.status === 200) {
-                    console.log('success');
-                    console.log(request.response);
+                    formMessage.textContent = statusMessage.success;
                 } else {
-                    console.log('error');
+                    formMessage.textContent = statusMessage.failure;
                 }
             });
         });
