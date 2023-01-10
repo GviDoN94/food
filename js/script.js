@@ -28,8 +28,8 @@ window.addEventListener("DOMContentLoaded", () => {
     hideTabContent();
     showTabContent();
 
-    tabsParent.addEventListener("click", (event) => {
-        const target = event.target;
+    tabsParent.addEventListener("click", (e) => {
+        const target = e.target;
         if (target && target.classList.contains("tabheader__item")) {
             tabs.forEach((item, i) => {
                 if (target == item) {
@@ -158,19 +158,19 @@ window.addEventListener("DOMContentLoaded", () => {
         document.body.style.overflow = '';
     }
 
-    modal.addEventListener('click', (event) => {
-        if (event.target === modal || event.target === modalCloseBtn) {
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal || e.target === modalCloseBtn) {
             closeModal();
         }
     });
 
-    document.addEventListener('keydown', (event) => {
-        if (event.code === 'Escape' && modal.classList.contains('show')) {
+    document.addEventListener('keydown', (e) => {
+        if (e.code === 'Escape' && modal.classList.contains('show')) {
             closeModal();
         }
     });
 
-    // const modalTimerId = setTimeout(openModal, 10000);
+    const modalTimerId = setTimeout(openModal, 10000);
 
     function showModalByScroll() {
         if (window.scrollY + document.documentElement.clientHeight >= document.documentElement.scrollHeight) {
@@ -262,4 +262,30 @@ window.addEventListener("DOMContentLoaded", () => {
         '.menu .container',
         'menu__item',
     ).render();
+
+    // Forms
+
+    function postData(form) {
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const request = new XMLHttpRequest();
+            request.open('POST', 'server.php');
+
+            const formData = new FormData(form);
+            request.send(formData);
+
+            request.addEventListener('load', () => {
+                if (request.status === 200) {
+                    console.log('success');
+                    console.log(request.response);
+                } else {
+                    console.log('error');
+                }
+            });
+        });
+    }
+
+    const forms = document.querySelectorAll('form');
+    forms.forEach(form => postData(form));
 });
