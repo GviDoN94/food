@@ -282,6 +282,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
             const request = new XMLHttpRequest();
             request.open('POST', 'server.php');
+            request.setRequestHeader('Content-type', 'application/json');
 
             const formData = new FormData(form);
             request.send(formData);
@@ -289,6 +290,8 @@ window.addEventListener("DOMContentLoaded", () => {
             request.addEventListener('load', () => {
                 if (request.status === 200) {
                     formMessage.textContent = statusMessage.success;
+                    form.reset();
+                    setTimeout(() => formMessage.remove(), 5000);
                 } else {
                     formMessage.textContent = statusMessage.failure;
                 }
