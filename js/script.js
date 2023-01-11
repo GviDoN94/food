@@ -265,7 +265,10 @@ window.addEventListener("DOMContentLoaded", () => {
     // Forms
 
     const messages = {
-        loading: 'Загрузка...',
+        loading: {
+            text: 'Загрузка',
+            link: 'img/form/spinner.svg'
+        },
         success: 'Спасибо! Скоро мы свяжемся с вами.',
         failure: 'Что-то пошло не так'
     };
@@ -274,10 +277,14 @@ window.addEventListener("DOMContentLoaded", () => {
         form.addEventListener('submit', (e) => {
             e.preventDefault();
 
-            const statusMessage = document.createElement('div');
-            statusMessage.classList.add('status');
-            statusMessage.textContent = messages.loading;
-            form.append(statusMessage);
+            const loading = document.createElement('img');
+            loading.src = messages.loading.link;
+            loading.alt = messages.loading.text;
+            loading.style.cssText = `
+                display: block;
+                margin: 0 auto;
+            `;
+            form.insertAdjacentElement('afterend', loading);
 
             const request = new XMLHttpRequest();
             request.open('POST', 'server.php');
@@ -297,7 +304,7 @@ window.addEventListener("DOMContentLoaded", () => {
                 if (request.status === 200) {
                     showThanksModal(messages.success);
                     form.reset();
-                    statusMessage.remove();
+                    loading.remove();
                 } else {
                     showThanksModal(messages.failure);
                 }
