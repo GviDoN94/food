@@ -136,8 +136,7 @@ window.addEventListener("DOMContentLoaded", () => {
     // Modal
 
     const modal = document.querySelector('.modal'),
-          modalOpenBtns = document.querySelectorAll('[data-modal]'),
-          modalCloseBtn = document.querySelector('[data-modal-close]');
+          modalOpenBtns = document.querySelectorAll('[data-modal]');
 
     function openModal() {
         modal.classList.add('show');
@@ -159,7 +158,7 @@ window.addEventListener("DOMContentLoaded", () => {
     }
 
     modal.addEventListener('click', (e) => {
-        if (e.target === modal || e.target === modalCloseBtn) {
+        if (e.target === modal || e.target.getAttribute('data-modal-close') === '') {
             closeModal();
         }
     });
@@ -267,7 +266,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
     const messages = {
         loading: 'Загрузка...',
-        success: 'Скоро мы свяжемся с вами!',
+        success: 'Спасибо! Скоро мы свяжемся с вами.',
         failure: 'Что-то пошло не так'
     };
 
@@ -296,14 +295,38 @@ window.addEventListener("DOMContentLoaded", () => {
 
             request.addEventListener('load', () => {
                 if (request.status === 200) {
-                    statusMessage.textContent = messages.success;
+                    showThanksModal(messages.success);
                     form.reset();
-                    setTimeout(() => statusMessage.remove(), 5000);
+                    statusMessage.remove();
                 } else {
-                    statusMessage.textContent = messages.failure;
+                    showThanksModal(messages.failure);
                 }
             });
         });
+    }
+
+    function showThanksModal(message) {
+        const previewModalDialog = modal.querySelector('.modal__dialog');
+
+        previewModalDialog.classList.add('hide');
+        openModal();
+
+        const thanksModal = document.createElement('div');
+        thanksModal.classList.add('modal__dialog');
+        thanksModal.innerHTML = `
+            <div class="modal__content">
+                <div class="modal__close" data-modal-close>×</div>
+                <div class="modal__title">${message}</div>
+            </div>
+        `;
+        modal.append(thanksModal);
+
+        setTimeout(() => {
+            thanksModal.remove();
+            previewModalDialog.classList.add('show');
+            previewModalDialog.classList.remove('hide');
+            closeModal();
+        }, 4000);
     }
 
     const forms = document.querySelectorAll('form');
