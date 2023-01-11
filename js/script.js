@@ -265,7 +265,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
     // Forms
 
-    const statusMessage = {
+    const messages = {
         loading: 'Загрузка...',
         success: 'Скоро мы свяжемся с вами!',
         failure: 'Что-то пошло не так'
@@ -275,25 +275,32 @@ window.addEventListener("DOMContentLoaded", () => {
         form.addEventListener('submit', (e) => {
             e.preventDefault();
 
-            const formMessage = document.createElement('div');
-            formMessage.classList.add('status');
-            formMessage.textContent = statusMessage.loading;
-            form.append(formMessage);
+            const statusMessage = document.createElement('div');
+            statusMessage.classList.add('status');
+            statusMessage.textContent = messages.loading;
+            form.append(statusMessage);
 
             const request = new XMLHttpRequest();
             request.open('POST', 'server.php');
-            request.setRequestHeader('Content-type', 'application/json');
+            request.setRequestHeader('Content-type', 'application/json; charset=utf-8');
 
             const formData = new FormData(form);
-            request.send(formData);
+
+            const object = {};
+
+            formData.forEach((value, key) => {
+                object[key] = value;
+            });
+
+            request.send(JSON.stringify(object));
 
             request.addEventListener('load', () => {
                 if (request.status === 200) {
-                    formMessage.textContent = statusMessage.success;
+                    statusMessage.textContent = messages.success;
                     form.reset();
-                    setTimeout(() => formMessage.remove(), 5000);
+                    setTimeout(() => statusMessage.remove(), 5000);
                 } else {
-                    formMessage.textContent = statusMessage.failure;
+                    statusMessage.textContent = messages.failure;
                 }
             });
         });
