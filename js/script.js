@@ -286,10 +286,6 @@ window.addEventListener("DOMContentLoaded", () => {
             `;
             form.insertAdjacentElement('afterend', loading);
 
-            const request = new XMLHttpRequest();
-            request.open('POST', 'server.php');
-            request.setRequestHeader('Content-type', 'application/json; charset=utf-8');
-
             const formData = new FormData(form);
 
             const object = {};
@@ -297,18 +293,22 @@ window.addEventListener("DOMContentLoaded", () => {
             formData.forEach((value, key) => {
                 object[key] = value;
             });
-
-            request.send(JSON.stringify(object));
-
-            request.addEventListener('load', () => {
-                if (request.status === 200) {
-                    showThanksModal(messages.success);
-                    form.reset();
-                    loading.remove();
-                } else {
-                    showThanksModal(messages.failure);
-                }
-            });
+            
+            fetch('server.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(object)
+            })
+            .then(data => data.text())
+            .then((data => {
+                console.log(data);
+                showThanksModal(messages.success);
+                loading.remove();
+            }))
+            .catch(() => showThanksModal(messages.failure))
+            .finally(() => form.reset());
         });
     }
 
@@ -339,3 +339,32 @@ window.addEventListener("DOMContentLoaded", () => {
     const forms = document.querySelectorAll('form');
     forms.forEach(form => postData(form));
 });
+
+const funds = [
+    {amount: -1400},
+    {amount: 2400},
+    {amount: -1000},
+    {amount: 500},
+    {amount: 10400},
+    {amount: -11400}
+];
+
+const getPositiveIncomeAmount = (data) => {
+    return data
+        .filter(item => item.amount > 0)
+        .map(item => item.amount)
+        .reduce((a, b) => a + b);
+};
+
+console.log(getPositiveIncomeAmount(funds));
+
+const getTotalIncomeAmount = (data) => {
+    if(data.some(item => item.amount < 0)) {
+        return data.map(item => item.amount)
+            .reduce((a, b) => a + b);
+    }   else {
+        return getPositiveIncomeAmount(data);
+    }
+};
+
+console.log(getTotalIncomeAmount(funds));
