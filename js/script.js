@@ -77,9 +77,8 @@ window.addEventListener("DOMContentLoaded", () => {
     function declOfNum(number, titles) {
         const cases = [2, 0, 1, 1, 1, 2];
         return titles[
-            number % 100 > 4 && number % 100 < 20
-            ? 2
-            : cases[number % 10 < 5 ? number % 10 : 5]
+            number % 100 > 4 && number % 100 < 20 ?
+            2 : cases[number % 10 < 5 ? number % 10 : 5]
         ];
     }
 
@@ -338,33 +337,8 @@ window.addEventListener("DOMContentLoaded", () => {
 
     const forms = document.querySelectorAll('form');
     forms.forEach(form => postData(form));
+
+    fetch('http://localhost:3000/menu')
+        .then(data => data.json())
+        .then(res => console.log(res));
 });
-
-const funds = [
-    {amount: -1400},
-    {amount: 2400},
-    {amount: -1000},
-    {amount: 500},
-    {amount: 10400},
-    {amount: -11400}
-];
-
-const getPositiveIncomeAmount = (data) => {
-    return data
-        .filter(item => item.amount > 0)
-        .map(item => item.amount)
-        .reduce((a, b) => a + b);
-};
-
-console.log(getPositiveIncomeAmount(funds));
-
-const getTotalIncomeAmount = (data) => {
-    if(data.some(item => item.amount < 0)) {
-        return data.map(item => item.amount)
-            .reduce((a, b) => a + b);
-    }   else {
-        return getPositiveIncomeAmount(data);
-    }
-};
-
-console.log(getTotalIncomeAmount(funds));
