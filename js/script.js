@@ -224,42 +224,21 @@ window.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    new MenuCard(
-        "img/tabs/vegy.jpg",
-        "vegy",
-        'Меню "Фитнес"',
-        `Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих
-        овощей и фруктов. Продукт активных и здоровых людей. Это абсолютноновый
-        продукт с оптимальной ценой и высоким качеством!`,
-        11,
-        '.menu .container',
-    ).render();
+    const getResource = async (url) => {
+        const res = await fetch(url);
+        if (!res.ok) {
+            throw new Error(`Could not fetch ${url}, status ${res.status}`);
+        }
 
-    new MenuCard(
-        "img/tabs/elite.jpg",
-        "elite",
-        'Меню “Премиум”',
-        `В&nbsp;меню &laquo;Премиум&raquo; мы&nbsp;используем не&nbsp;только
-        красивый дизайн упаковки, но&nbsp;и&nbsp;качественное исполнение блюд.
-        Красная рыба, морепродукты, фрукты&nbsp;&mdash; ресторанное меню без
-        похода в&nbsp;ресторан!`,
-        15,
-        '.menu .container',
-        'menu__item',
-    ).render();
+        return await res.json();
+    };
 
-    new MenuCard(
-        "img/tabs/post.jpg",
-        "post",
-        'Меню "Постное"',
-        `Меню “Постное” - это тщательный подбор ингредиентов: полное отсутствие
-        продуктов животного происхождения,молоко из миндаля, овса, кокоса
-        или гречки, правильное количество белков за счет тофу и импортных
-        вегетарианских стейков.`,
-        9,
-        '.menu .container',
-        'menu__item',
-    ).render();
+    getResource('http://localhost:3000/menu')
+        .then(data => {
+            data.forEach(({img, altimg, title, descr, price}) => {
+                new MenuCard(img, altimg, title, descr, price, '.menu .container').render();
+            });
+        });
 
     // Forms
 
