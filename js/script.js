@@ -272,7 +272,19 @@ window.addEventListener("DOMContentLoaded", () => {
         failure: 'Что-то пошло не так'
     };
 
-    function postData(form) {
+    const postData = async (url, data) => {
+        const res = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: data
+        });
+
+        return await res.json();
+    };
+
+    function bindPostData(form) {
         form.addEventListener('submit', (e) => {
             e.preventDefault();
 
@@ -285,22 +297,11 @@ window.addEventListener("DOMContentLoaded", () => {
             `;
             form.insertAdjacentElement('afterend', loading);
 
-            const formData = new FormData(form);
-
-            const object = {};
-
-            formData.forEach((value, key) => {
-                object[key] = value;
-            });
+            const formData = new FormData(form),
+                  json = JSON.stringify(Object.fromEntries(formData.entries()));
             
-            fetch('server.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(object)
-            })
-            .then(data => data.text())
+
+            postData('http://localhost:3000/requests', json)
             .then((data => {
                 console.log(data);
                 showThanksModal(messages.success);
@@ -336,9 +337,5 @@ window.addEventListener("DOMContentLoaded", () => {
     }
 
     const forms = document.querySelectorAll('form');
-    forms.forEach(form => postData(form));
-
-    fetch('http://localhost:3000/menu')
-        .then(data => data.json())
-        .then(res => console.log(res));
+    forms.forEach(form => bindPostData(form));
 });
