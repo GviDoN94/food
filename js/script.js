@@ -317,4 +317,47 @@ window.addEventListener("DOMContentLoaded", () => {
 
     const forms = document.querySelectorAll('form');
     forms.forEach(form => bindPostData(form));
+
+    // Slider
+
+    const slides = document.querySelectorAll('.offer__slide'),
+          prevBtn = document.querySelector('.offer__slider-prev'),
+          nextBtn = document.querySelector('.offer__slider-next'),
+          currentSlide = document.querySelector('#current'),
+          totalSlide = document.querySelector('#total');
+    let slideIndex = 1;
+
+    if (slides.length < 10) {
+        totalSlide.textContent = `0${slides.length}`;
+    } else {
+        totalSlide.textContent = slides.length;
+    }
+
+    function showSlides(n) {
+        if (slideIndex > slides.length) {
+            slideIndex = 1;
+        }
+
+        if (slideIndex < 1) {
+            slideIndex = slides.length;
+        }
+        
+        slides.forEach(slide => slide.style.display = 'none');
+        slides[slideIndex - 1].style.display = 'block';
+        
+        if (slideIndex < 10) {
+            currentSlide.textContent = `0${slideIndex}`;
+        } else {
+            currentSlide.textContent = slideIndex;
+        }
+    }
+
+    showSlides(slideIndex);
+
+    function nextSlide(n) {
+        showSlides(slideIndex += n)
+    }
+
+    nextBtn.addEventListener('click', () => nextSlide(1));
+    prevBtn.addEventListener('click', () => nextSlide(-1));
 });
