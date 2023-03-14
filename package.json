@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/GviDoN94/food#readme",
   "devDependencies": {
-    "json-server": "^0.17.1"
+    "json-server": "^0.17.1",
+    "webpack": "^5.76.1",
+    "webpack-cli": "^5.0.1"
   }
 }
