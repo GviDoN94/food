@@ -1,6 +1,9 @@
 'use strict';
 
-function forms() {
+import {openModal, closeModal} from "./modal";
+import {postData} from "../services/services";
+
+function forms(formSelector, modalSlector, modalTimerId = null) {
     const messages = {
         loading: {
             text: 'Загрузка',
@@ -8,18 +11,6 @@ function forms() {
         },
         success: 'Спасибо! Скоро мы свяжемся с вами.',
         failure: 'Что-то пошло не так'
-    };
-
-    const postData = async (url, data) => {
-        const res = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: data
-        });
-
-        return await res.json();
     };
 
     function bindPostData(form) {
@@ -51,10 +42,10 @@ function forms() {
     }
 
     function showThanksModal(message) {
-        const previewModalDialog = modal.querySelector('.modal__dialog');
+        const previewModalDialog = document.querySelector('.modal__dialog');
 
         previewModalDialog.classList.add('hide');
-        openModal();
+        openModal(modalSlector, modalTimerId);
 
         const thanksModal = document.createElement('div');
         thanksModal.classList.add('modal__dialog');
@@ -64,17 +55,17 @@ function forms() {
                 <div class="modal__title">${message}</div>
             </div>
         `;
-        modal.append(thanksModal);
+        document.querySelector(modalSlector).append(thanksModal);
 
         setTimeout(() => {
             thanksModal.remove();
             previewModalDialog.classList.add('show');
             previewModalDialog.classList.remove('hide');
-            closeModal();
+            closeModal(modalSlector);
         }, 4000);
     }
 
-    const forms = document.querySelectorAll('form');
+    const forms = document.querySelectorAll(formSelector);
     forms.forEach(form => bindPostData(form));
 }
 

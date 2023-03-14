@@ -1,7 +1,6 @@
 'use strict';
 
-function timer() {
-    const deadline = "2023-05-20T00:00:00.000+03:00";
+function timer(id, deadline) {
 
     function getTimerRemaind(endTime) {
         const total = Date.parse(endTime) - Date.parse(new Date());
@@ -89,7 +88,7 @@ function timer() {
         }
     }
 
-    setClock(".timer", deadline);
+    setClock(id, deadline);
 }
 
 export default timer;
